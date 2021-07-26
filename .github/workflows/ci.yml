@@ -1,0 +1,24 @@
+name: build
+
+on: push
+
+jobs:
+  job-test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: debug
+        run: echo ${GITHUB_REF}
+
+      - name: Get branch
+        id: get_branch
+        run: echo ::set-output name=GITHUB_BRANCH::${GITHUB_REF/refs\/heads\//}
+
+      - name: Test
+        run: make ci
+        env:
+          GITHUB_BRANCH: ${{ steps.get_branch.outputs.GITHUB_BRANCH }}
+
