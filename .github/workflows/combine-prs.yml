@@ -62,7 +62,7 @@ jobs:
                     if(latest_status != 'success') {
                       console.log('Discarding ' + branch + ' with status ' + latest_status);
                       statusOK = false;
-
+                    }
                   }
                 }
                 console.log('Checking labels: ' + branch);
@@ -83,10 +83,12 @@ jobs:
                 }
               }
             }
+
             if (branches.length == 0) {
               core.setFailed('No PRs/branches matched criteria');
               return;
             }
+
             core.setOutput('base-branch', base_branch);
             core.setOutput('prs-string', prs.join('\n'));
             
