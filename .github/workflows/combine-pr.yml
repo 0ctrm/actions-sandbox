@@ -59,10 +59,6 @@ jobs:
                   if(statuses.length > 0) {
                     const latest_status = statuses[0]['state'];
                     console.log('Validating status: ' + latest_status);
-                    if(latest_status != 'success') {
-                      console.log('Discarding ' + branch + ' with status ' + latest_status);
-                      statusOK = false;
-                    }
                   }
                 }
                 console.log('Checking labels: ' + branch);
@@ -115,10 +111,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           
-          git branch $COMBINE_BRANCH_NAME $basebranch
-          git checkout $COMBINE_BRANCH_NAME
-          git pull origin $sourcebranches --no-edit
-          git push origin $COMBINE_BRANCH_NAME
       # Creates a PR with the new combined branch
       - uses: actions/github-script@v3
         name: Create Combined Pull Request
@@ -127,11 +119,3 @@ jobs:
           script: |
             const prString = `${{ steps.fetch-branch-names.outputs.prs-string }}`;
             const body = 'This PR was created by the Combine PRs action by combining the following PRs:\n' + prString;
-            await github.pulls.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: 'Combined PR',
-              head: '${{ github.event.inputs.combineBranchName }}',
-              base: '${{ steps.fetch-branch-names.outputs.base-branch }}',
-              body: body
-            });
