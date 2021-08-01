@@ -1,0 +1,12 @@
+name: 'NOP'
+
+on: ['push', 'pull_request']
+
+jobs:
+  nop:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.3.3
+        with:
+          fetch-depth: 0
